@@ -83,7 +83,7 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
-          sudo tar -czf archlinux-$VERSION.tar.xz --one-file-system -C archlinux .
+          sudo tar -czpf archlinux-$VERSION.tar.xz --one-file-system -C archlinux .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
