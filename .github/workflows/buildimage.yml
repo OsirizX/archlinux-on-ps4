@@ -3,13 +3,16 @@ name: Create Arch Linux image
 on:
   workflow_dispatch:
 
+env:
+  VERSION: 2024.06.01
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Download Arch Linux
-        run: wget -q https://archive.archlinux.org/iso/2024.06.01/archlinux-bootstrap-x86_64.tar.zst
+        run: wget -q https://archive.archlinux.org/iso/$VERSION/archlinux-bootstrap-x86_64.tar.zst
 
       - name: Install dependencies
         run: |
@@ -46,7 +49,7 @@ jobs:
           EOF
 
           cat << EOF > /etc/pacman.d/mirrorlist
-          Server = https://archive.archlinux.org/repos/2024/06/01/\$repo/os/\$arch
+          Server = https://archive.archlinux.org/repos/${VERSION//./\/}/\$repo/os/\$arch
           EOF
 
           mkdir -p /lib/firmware/edid
@@ -80,10 +83,10 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
-          sudo tar -czf archlinux-2024.06.01.tar.xz --one-file-system -C archlinux .
+          sudo tar -czf archlinux-$VERSION.tar.xz --one-file-system -C archlinux .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: archlinux-2024.06.01
-          path: archlinux-2024.06.01.tar.xz
+          name: archlinux-${{ env.VERSION }}
+          path: archlinux-${{ env.VERSION }}.tar.xz
