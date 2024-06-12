@@ -40,16 +40,7 @@ jobs:
           echo "playstation" >> /etc/hostname
           ln -sf /usr/share/zoneinfo/US/Pacific /etc/localetime
 
-          cat << EOF > /etc/pacman.conf
-          [core]
-          Include = /etc/pacman.d/mirrorlist
-
-          [extra]
-          Include = /etc/pacman.d/mirrorlist
-
-          [community]
-          Include = /etc/pacman.d/mirrorlist
-
+          cat >> /etc/pacman.conf << "EOF"
           [multilib]
           Include = /etc/pacman.d/mirrorlist
 
