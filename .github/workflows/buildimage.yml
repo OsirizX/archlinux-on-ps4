@@ -77,8 +77,6 @@ jobs:
           makepkg -si --noconfirm
           cd ..
           exit
-
-          sudo tar -cpJf psxitarch.tar.xz --exclude /psxitarch.tar.xz --one-file-system /
           EOT
 
           sudo umount -l archlinux/proc/
@@ -86,8 +84,10 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
+          sudo tar -cpJf psxitarch.tar.xz --one-file-system -C archlinux .
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ps4-archlinux
-          path: archlinux/psxitarch.tar.xz
+          path: psxitarch.tar.xz
