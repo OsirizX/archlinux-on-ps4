@@ -13,7 +13,7 @@ jobs:
           python-version: "3.11"
 
       - name: Download Arch Linux
-        run: wget https://archive.archlinux.org/iso/2024.06.01/archlinux-bootstrap-x86_64.tar.zst
+        run: wget -q https://archive.archlinux.org/iso/2024.06.01/archlinux-bootstrap-x86_64.tar.zst
 
       - name: Install dependencies
         run: |
@@ -84,10 +84,10 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
-          sudo tar -cpJf psxitarch.tar.xz --one-file-system -C archlinux .
+          sudo tar -czf psxitarch-2024.06.01.tar.xz --one-file-system -C archlinux .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ps4-archlinux
-          path: psxitarch.tar.xz
+          path: psxitarch-2024.06.01.tar.xz
