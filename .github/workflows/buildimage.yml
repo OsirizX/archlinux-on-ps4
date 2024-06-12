@@ -80,10 +80,10 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
-          sudo tar -czf psxitarch-2024.06.01.tar.xz --one-file-system -C archlinux .
+          sudo tar -czf archlinux-2024.06.01.tar.xz --one-file-system -C archlinux .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ps4-archlinux
-          path: psxitarch-2024.06.01.tar.xz
+          name: archlinux-2024.06.01
+          path: archlinux-2024.06.01.tar.xz
