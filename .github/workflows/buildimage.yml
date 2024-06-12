@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Set current Date Time as VERSION
         shell: bash
-        run: echo "VERSION=$(date +x'%Y.%m.%d')" >> $GITHUB_ENV
+        run: echo "VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
 
       - name: Download Arch Linux
         run: wget -q https://www.mirrorservice.org/sites/ftp.archlinux.org/iso/latest/archlinux-bootstrap-x86_64.tar.zst
