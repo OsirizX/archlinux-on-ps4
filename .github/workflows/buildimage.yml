@@ -13,7 +13,7 @@ jobs:
         run: echo "VERSION=$(date +"%Y.%M.%d")" >> $GITHUB_ENV
 
       - name: Download Arch Linux
-        run: wget -q https://www.mirrorservice.org/sites/ftp.archlinux.org/iso/latest/archlinux-bootstrap-x86_64.tar.gz
+        run: wget -q https://www.mirrorservice.org/sites/ftp.archlinux.org/iso/latest/archlinux-bootstrap-x86_64.tar.zst
 
       - name: Install dependencies
         run: |
