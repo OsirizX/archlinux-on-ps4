@@ -48,8 +48,10 @@ jobs:
           Server = https://psxita.it/repo-testing
           EOF
 
+          VER=$(echo ${{ env.VERSION }} | sed -r 's/\./\//g')
+
           cat << EOF > /etc/pacman.d/mirrorlist
-          Server = https://archive.archlinux.org/repos/${VERSION//./\/}/\$repo/os/\$arch
+          Server = https://archive.archlinux.org/repos/$VER/\$repo/os/\$arch
           EOF
 
           mkdir -p /lib/firmware/edid
