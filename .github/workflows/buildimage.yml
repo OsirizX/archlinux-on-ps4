@@ -3,16 +3,17 @@ name: Create Arch Linux image
 on:
   workflow_dispatch:
 
-env:
-  VERSION: 2024.06.01
-
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set current Date Time as VERSION
+        shell: bash
+        run: echo "VERSION=$(date +"%Y.%M.%d")" >> $GITHUB_ENV
+
       - name: Download Arch Linux
-        run: wget -q https://archive.archlinux.org/iso/$VERSION/archlinux-bootstrap-x86_64.tar.zst
+        run: wget -q https://www.mirrorservice.org/sites/ftp.archlinux.org/iso/latest/archlinux-bootstrap-x86_64.tar.gz
 
       - name: Install dependencies
         run: |
@@ -85,7 +86,7 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
-          sudo tar -czpf archlinux-$VERSION.tar.xz --one-file-system -C archlinux .
+          sudo tar -czpf archlinux-${{ env.VERSION }}.tar.xz --one-file-system -C archlinux .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
