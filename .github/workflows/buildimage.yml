@@ -21,7 +21,6 @@ jobs:
           sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.zst -C archlinux
 
           sudo cp /etc/resolv.conf archlinux/etc
-          sudo cp mirrorlist archlinux/etc/pacman.d/mirrorlist
 
           sudo mount -t proc /proc archlinux/proc/
           sudo mount -t sysfs /sys archlinux/sys/
@@ -59,7 +58,6 @@ jobs:
           Server = https://psxita.it/repo-testing
           EOF
 
-          touch /etc/pacman.d/mirrorlist
           cat << EOF > /etc/pacman.d/mirrorlist
           Server = https://archive.archlinux.org/repos/2024/06/01/\$repo/os/\$arch
           EOF
