@@ -12,21 +12,13 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Download Reflector
-        run: wget https://xyne.dev/projects/reflector/src/reflector-2023.tar.xz
-
-      - name: Run Reflector to obtain closest Arch Linux mirrors
-        run: |
-          tar -xvJf reflector-2023.tar.xz
-          sudo python3 reflector-2023/Reflector.py --latest 5 --sort rate --save mirrorlist
-
       - name: Download Arch Linux
-        run: wget https://www.mirrorservice.org/sites/ftp.archlinux.org/iso/latest/archlinux-bootstrap-x86_64.tar.gz
+        run: wget https://archive.archlinux.org/iso/2024.06.01/archlinux-bootstrap-x86_64.tar.zst
 
       - name: Install dependencies
         run: |
           sudo mkdir archlinux
-          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.gz -C archlinux
+          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.zst -C archlinux
 
           sudo cp /etc/resolv.conf archlinux/etc
           sudo cp mirrorlist archlinux/etc/pacman.d/mirrorlist
@@ -44,22 +36,32 @@ jobs:
           sed -i 's/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
           locale-gen
 
-          echo "LANG=en_GB.UTF-8" >> /etc/locale.conf
-          echo "KEYMAP=uk" >> /etc/vconsole.conf
+          echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+          echo "KEYMAP=us" >> /etc/vconsole.conf
           echo "playstation" >> /etc/hostname
-          ln -sf /usr/share/zoneinfo/Europe/London /etc/localetime
+          ln -sf /usr/share/zoneinfo/US/Pacific /etc/localetime
 
-          cat >> /etc/pacman.conf << "EOF"
-          [multilib]
+          cat << EOF > /etc/pacman.conf
+          [core]
           Include = /etc/pacman.d/mirrorlist
 
-          [sevencoil]
-          SigLevel = Optional DatabaseOptional
-          Server = https://archlinux.leondrolio.com/packages/$repo/os/$arch
+          [extra]
+          Include = /etc/pacman.d/mirrorlist
+
+          [community]
+          Include = /etc/pacman.d/mirrorlist
+
+          [multilib]
+          Include = /etc/pacman.d/mirrorlist
 
           [ps4]
           SigLevel = Never
           Server = https://psxita.it/repo-testing
+          EOF
+
+          touch /etc/pacman.d/mirrorlist
+          cat << EOF > /etc/pacman.d/mirrorlist
+          Server = https://archive.archlinux.org/repos/2024/06/01/\$repo/os/\$arch
           EOF
 
           mkdir -p /lib/firmware/edid
@@ -72,11 +74,7 @@ jobs:
           pacman-key --init
           pacman-key --populate archlinux
           pacman --noconfirm -Syu
-          pacman --noconfirm -S networkmanager git base-devel nano htop wget curl sudo reflector ntp mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git llvm14-libs
-          systemctl enable NetworkManager
-          systemctl enable ntpd
-          systemctl enable systemd-timesyncd
-          timedatectl set-ntp true
+          pacman --noconfirm -S git base-devel vim wget curl sudo mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git llvm14-libs
 
           echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
           echo 'Defaults lecture="never"' >> /etc/sudoers
@@ -102,5 +100,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: sevencoil-ps4-linux
+          name: ps4-archlinux
           path: archlinux/psxitarch.tar.xz
