@@ -26,8 +26,8 @@ jobs:
         run: |
           sudo mkdir gentoo
           sudo tar --numeric-owner --strip-components=1 -xpf stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz -C gentoo
-          sudo tar --numeric-owner --strip-components=1 -xpf gentoo-${{ env.PORTAGE_VERSION }}.tar.xz -C gentoo/var/db/repos/
-          mv gentoo/var/db/repos/gentoo-${{ env.PORTAGE_VERSION }} gentoo/var/db/repos/gentoo
+          sudo mkdir -p gentoo/var/db/repos/gentoo
+          sudo tar --numeric-owner --strip-components=1 -xpf gentoo-${{ env.PORTAGE_VERSION }}.tar.xz -C gentoo/var/db/repos/gentoo
 
           sudo cp /etc/resolv.conf gentoo/etc
 
