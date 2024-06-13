@@ -3,80 +3,59 @@ name: Create Gentoo image
 on:
   workflow_dispatch:
 
+env:
+  STAGE3_VERSION: 20240602T164858Z
+  PORTAGE_VERSION: 20240607
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
+      - name: Set current Date Time as VERSION
+        shell: bash
+        run: echo "VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
 
-      - name: Download Reflector
-        run: wget https://xyne.dev/projects/reflector/src/reflector-2023.tar.xz
+      - name: Download stage3
+        run: wget -q https://distfiles.gentoo.org/releases/amd64/autobuilds/${{ env.STAGE3_VERSION }}/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz
 
-      - name: Run Reflector to obtain closest Arch Linux mirrors
-        run: |
-          tar -xvJf reflector-2023.tar.xz
-          sudo python3 reflector-2023/Reflector.py --latest 5 --sort rate --save mirrorlist
-
-      - name: Download Arch Linux
-        run: wget https://www.mirrorservice.org/sites/ftp.archlinux.org/iso/latest/archlinux-bootstrap-x86_64.tar.gz
+      - name: Download portage
+        run: wget -q https://distfiles.gentoo.org/snapshots/gentoo-${{ env.PORTAGE_VERSION }}.tar.xz
 
       - name: Install dependencies
         run: |
-          sudo mkdir archlinux
-          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.gz -C archlinux
+          sudo mkdir gentoo
+          sudo tar --numeric-owner --strip-components=1 -xpf stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz -C gentoo
+          sudo tar --numeric-owner --strip-components=1 -xpf gentoo-${{ env.PORTAGE_VERSION }}.tar.xz -C gentoo/var/db/repos/
+          mv gentoo/var/db/repos/gentoo-${{ env.PORTAGE_VERSION }} gentoo/var/db/repos/gentoo
 
-          sudo cp /etc/resolv.conf archlinux/etc
-          sudo cp mirrorlist archlinux/etc/pacman.d/mirrorlist
+          sudo cp /etc/resolv.conf gentoo/etc
 
-          sudo mount -t proc /proc archlinux/proc/
-          sudo mount -t sysfs /sys archlinux/sys/
-          sudo mount --rbind /dev archlinux/dev/
-          sudo mount --rbind /run archlinux/run/
+          sudo mount -t proc /proc gentoo/proc/
+          sudo mount -t sysfs /sys gentoo/sys/
+          sudo mount --rbind /dev gentoo/dev/
+          sudo mount --rbind /run gentoo/run/
 
-          sudo chroot archlinux/ << "EOT"
-          echo "LABEL=psxitarch / ext4 rw,relatime,data=ordered 0 1" >> /etc/fstab
+          sudo chroot gentoo/ << "EOT"
+          echo "LABEL=gentoo / ext4 rw,relatime,data=ordered 0 1" >> /etc/fstab
 
-          sed -i 's/CheckSpace/#CheckSpace/g' /etc/pacman.conf
           sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
           sed -i 's/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
           locale-gen
 
-          echo "LANG=en_GB.UTF-8" >> /etc/locale.conf
-          echo "KEYMAP=uk" >> /etc/vconsole.conf
+          echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+          echo "KEYMAP=us" >> /etc/vconsole.conf
           echo "playstation" >> /etc/hostname
-          ln -sf /usr/share/zoneinfo/Europe/London /etc/localetime
-
-          cat >> /etc/pacman.conf << "EOF"
-          [multilib]
-          Include = /etc/pacman.d/mirrorlist
-
-          [sevencoil]
-          SigLevel = Optional DatabaseOptional
-          Server = https://archlinux.leondrolio.com/packages/$repo/os/$arch
-
-          [ps4]
-          SigLevel = Never
-          Server = https://psxita.it/repo-testing
-          EOF
+          ln -sf /usr/share/zoneinfo/US/Pacific /etc/localetime
 
           mkdir -p /lib/firmware/edid
 
-          useradd -m pi -G wheel
+          useradd -m pi -G pi
           passwd pi
           raspberry
           raspberry
 
-          pacman-key --init
-          pacman-key --populate archlinux
-          pacman --noconfirm -Syu
-          pacman --noconfirm -S networkmanager git base-devel nano htop wget curl sudo reflector ntp mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git llvm14-libs
-          systemctl enable NetworkManager
-          systemctl enable ntpd
-          systemctl enable systemd-timesyncd
-          timedatectl set-ntp true
+          emerge vim sudo
 
           echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
           echo 'Defaults lecture="never"' >> /etc/sudoers
@@ -85,22 +64,18 @@ jobs:
           cd ~/
           touch ~/.sudo_as_admin_successful
 
-          git clone https://aur.archlinux.org/yay-bin.git
-          cd yay-bin
-          makepkg -si --noconfirm
-          cd ..
           exit
-
-          sudo tar -cpJf psxitarch.tar.xz --exclude /psxitarch.tar.xz --one-file-system /
           EOT
 
-          sudo umount -l archlinux/proc/
-          sudo umount -l archlinux/sys/
-          sudo umount -l archlinux/dev/
-          sudo umount -l archlinux/run/
+          sudo umount -l gentoo/proc/
+          sudo umount -l gentoo/sys/
+          sudo umount -l gentoo/dev/
+          sudo umount -l gentoo/run/
+
+          sudo tar -czpf gentoo-${{ env.PORTAGE_VERSION }}.tar.xz --one-file-system -C gentoo .
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: sevencoil-ps4-linux
-          path: archlinux/psxitarch.tar.xz
+          name: gentoo-${{ env.PORTAGE_VERSION }}
+          path: gentoo-${{ env.PORTAGE_VERSION }}.tar.xz
