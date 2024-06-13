@@ -97,7 +97,7 @@ jobs:
           EOF
 
           emerge --nodeps vim
-          emerge git sudo
+          emerge dev-vcs/git sudo
 
           git clone https://github.com/Dr4kk3N/ps4-overlay.git /var/db/repos/ps4-overlay
 
