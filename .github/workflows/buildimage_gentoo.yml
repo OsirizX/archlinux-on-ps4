@@ -98,8 +98,8 @@ jobs:
           priority = 25
           EOF
 
-          emerge --nodeps vim
-          emerge dev-vcs/git sudo
+          emerge -vp --nodeps vim
+          emerge -vp dev-vcs/git sudo
 
           git clone https://github.com/Dr4kk3N/ps4-overlay.git /var/db/repos/ps4-overlay
 
