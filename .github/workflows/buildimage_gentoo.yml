@@ -58,7 +58,7 @@ jobs:
           BINPKG_COMPRESS="lz4"
           EMERGE_DEFAULT_OPTS="-v"
           EMERGE_DEFAULT_OPTS="\${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'sys-kernel/gentoo-sources virtual/*'"
-          MAKEOPTS="-j4 -l4"
+          MAKEOPTS="-j8"
           LC_MESSAGES=C.utf8
           LINGUAS="en"
           L10N="en en-US"
