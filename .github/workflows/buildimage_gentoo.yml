@@ -55,7 +55,8 @@ jobs:
           raspberry
           raspberry
 
-          emerge vim sudo
+          emerge --nodeps vim
+          emerge sudo
 
           echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
           echo 'Defaults lecture="never"' >> /etc/sudoers
