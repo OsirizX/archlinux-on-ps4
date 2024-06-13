@@ -48,6 +48,9 @@ jobs:
           echo "playstation" >> /etc/hostname
           ln -sf /usr/share/zoneinfo/US/Pacific /etc/localetime
 
+          emerge -v --nodeps vim
+          emerge -v dev-vcs/git sudo
+
           cat << EOF > /etc/portage/make.conf
           COMMON_FLAGS="-march=x86-64-v2 -mtune=btver2 -flto=4 -O2 -pipe"
           CFLAGS="\${COMMON_FLAGS}"
@@ -98,9 +101,6 @@ jobs:
           priority = 25
           EOF
 
-          emerge -vp --nodeps vim
-          emerge -vp dev-vcs/git sudo
-
           git clone https://github.com/Dr4kk3N/ps4-overlay.git /var/db/repos/ps4-overlay
 
           cat << EOF > /etc/portage/repos.conf/ps4-overlay.conf
@@ -118,7 +118,7 @@ jobs:
           media-libs/mesa::gentoo
           EOF
 
-          emerge x11-libs/libdrm::ps4-overlay \
+          emerge -v x11-libs/libdrm::ps4-overlay \
                  x11-drivers/xf86-video-amdgpu::ps4-overlay \
                  media-libs/mesa::ps4-overlay
 
