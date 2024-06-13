@@ -48,15 +48,82 @@ jobs:
           echo "playstation" >> /etc/hostname
           ln -sf /usr/share/zoneinfo/US/Pacific /etc/localetime
 
+          cat << EOF > /etc/portage/make.conf
+          COMMON_FLAGS="-march=x86-64-v2 -mtune=btver2 -flto=4 -O2 -pipe"
+          CFLAGS="\${COMMON_FLAGS}"
+          CXXFLAGS="\${COMMON_FLAGS}"
+          FCFLAGS="\${COMMON_FLAGS}"
+          FFLAGS="\${COMMON_FLAGS}"
+          BINPKG_FORMAT="gpkg"
+          BINPKG_COMPRESS="lz4"                                                                                            EMERGE_DEFAULT_OPTS="-av"
+          EMERGE_DEFAULT_OPTS="\${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'sys-kernel/gentoo-sources virtual/*'"
+          MAKEOPTS="-j4 -l4"
+          LC_MESSAGES=C.utf8
+          LINGUAS="en"
+          L10N="en en-US"
+          PYTHON_TARGETS="python3_12"
+          PYTHON_SINGLE_TARGET="python3_12"
+          LUA_TARGETS="lua5-3 lua5-4"
+          LUA_SINGLE_TARGET="lua5-3"
+          RUBY_TARGETS="ruby31 ruby32"
+          PHP_TARGETS="php8-1"
+          LLVM_TARGETS="AMDGPU"
+          VIDEO_CARDS="amdgpu radeon radeonsi lavapipe"
+          ACCEPT_KEYWORDS="~amd64"
+          ACCEPT_LICENSE="*"
+          INPUT_DEVICES="libinput keyboard mouse evdev joystick"
+          USE="X abi_x86_64 abi_x86_32 lto -systemd elogind dbus ibus policykit pulseaudio pipewire \
+            -gstreamer wayland -gnome -kde -xinerama -samba -xscreensaver \
+            networkmanager nftables openvpn lm_sensors lm-sensors hddtemp bluetooth \
+            highlight vim-syntax hscolour appindicator startup-notification libnotify \
+            joystick touchpad gamepad alsa screencast dvd user-session notify \
+            vdpau dri3 vulkan opengl gles gles1 gles3 gles2 d3d9 osmesa opencl dhcpcd vala \
+            zip xa sdl2 egl sdl bluray bdplus aacs nfs v4l x264 x265 \
+            drm vaapi ffmpeg vulkan-overlay evdev udev qml \
+            -jack mda-lv2 zamaudio portaudio ladspa vst sndio tremor discid cdio \
+            flac aac dts mp3 mp4 mikmod modplug theora xvid opus midi wildmidi \
+            timidity libsamplerate speex ogg vorbis cdda cddb id3tag mad audiofile \
+            svg png apng webp heif jpeg -tiff gif raw exif openexr \
+            spell fontconfig corefonts truetype freetype ttf tahoma pdf"
+          GENTOO_MIRRORS="http://ftp.free.fr/mirrors/ftp.gentoo.org/ http://mirrors.soeasyto.com/distfiles.gentoo.org/ http://gentoo.mirrors.ovh.net/gentoo-distfiles/"
+          EOF
+
+          cat << EOF > /etc/portage/repos.conf/gentoo.conf
+          sync-type = rsync
+          sync-uri = rsync://rsync.gentoo.org/gentoo-portage
+          auto-sync = no
+          priority = 25
+          EOF
+
+          emerge --nodeps vim
+          emerge git sudo
+
+          git clone https://github.com/Dr4kk3N/ps4-overlay.git /var/db/repos/ps4-overlay
+
+          cat << EOF > /etc/portage/repos.conf/ps4-overlay.conf
+          location = /var/db/repos/ps4-overlay
+          sync-type = git
+          sync-uri = https://github.com/Dr4kk3N/ps4-overlay.git
+          priority = 50
+          auto-sync = yes
+          EOF
+
+          cat << EOF > /etc/portage/package.mask/gentoo.mask
+          x11-libs/libdrm::gentoo
+          x11-drivers/xf86-video-amdgpu::gentoo
+          media-libs/mesa::gentoo
+          EOF
+
+          emerge x11-libs/libdrm::ps4-overlay \
+                 x11-drivers/xf86-video-amdgpu::ps4-overlay \
+                 media-libs/mesa::ps4-overlay
+
           mkdir -p /lib/firmware/edid
 
           useradd -m pi -G pi
           passwd pi
           raspberry
           raspberry
-
-          emerge --nodeps vim
-          emerge sudo
 
           echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
           echo 'Defaults lecture="never"' >> /etc/sudoers
