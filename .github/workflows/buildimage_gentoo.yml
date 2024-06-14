@@ -31,7 +31,7 @@ jobs:
         run: |
           git clone https://github.com/Dr4kk3N/ps4-overlay.git ps4-overlay
           cd ps4-overlay
-          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.GIT_VERSION }}" master)
+          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.GIT_VERSION }}" main)
 
       - name: Install dependencies
         run: |
