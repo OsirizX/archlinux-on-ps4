@@ -6,7 +6,7 @@ on:
 env:
   STAGE3_VERSION: 20240602T164858Z
   PORTAGE_VERSION: 20240607
-  PORTAGE_VERSION_GIT: 2024-06-07
+  GIT_VERSION: 2024-06-07
 
 jobs:
   build:
@@ -23,22 +23,28 @@ jobs:
       - name: Download portage
         #run: wget -q https://distfiles.gentoo.org/snapshots/gentoo-${{ env.PORTAGE_VERSION }}.tar.xz
         run: |
-          git clone https://github.com/gentoo/gentoo portage
+          git clone https://github.com/gentoo/gentoo.git portage
           cd portage
-          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.PORTAGE_VERSION_GIT }}" master)
+          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.GIT_VERSION }}" master)
+
+      - name: Download ps4-overlay
+        run: |
+          git clone https://github.com/Dr4kk3N/ps4-overlay.git ps4-overlay
+          cd ps4-overlay
+          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.GIT_VERSION }}" master)
 
       - name: Install dependencies
         run: |
           sudo mkdir gentoo
           sudo tar --numeric-owner --strip-components=1 -xpf stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz -C gentoo
+
           #sudo mkdir -p gentoo/var/db/repos/gentoo
           #sudo tar --numeric-owner --strip-components=1 -xpf gentoo-${{ env.PORTAGE_VERSION }}.tar.xz -C gentoo/var/db/repos/gentoo
 
           sudo mv portage gentoo/var/db/repos/gentoo
+          sudo mv ps4-overlay gentoo/var/db/repos/ps4-overlay
 
           sudo cp /etc/resolv.conf gentoo/etc
-
-          sudo git clone https://github.com/Dr4kk3N/ps4-overlay.git gentoo/var/db/repos/ps4-overlay
 
           sudo mount -t proc /proc gentoo/proc/
           sudo mount -t sysfs /sys gentoo/sys/
