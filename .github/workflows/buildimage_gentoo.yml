@@ -77,7 +77,7 @@ jobs:
             -gstreamer wayland -gnome -kde -xinerama -samba -xscreensaver \
             networkmanager nftables openvpn lm_sensors lm-sensors hddtemp bluetooth \
             highlight vim-syntax hscolour appindicator startup-notification libnotify \
-            -gpm joystick touchpad gamepad alsa screencast dvd user-session notify \
+            -gpm joystick touchpad gamepad sound alsa alsa-plugin screencast dvd user-session notify \
             vdpau dri3 vulkan opengl gles gles1 gles3 gles2 d3d9 osmesa opencl dhcpcd vala \
             zip xa sdl2 egl sdl bluray bdplus aacs nfs v4l x264 x265 \
             drm vaapi ffmpeg vulkan-overlay evdev udev qml \
