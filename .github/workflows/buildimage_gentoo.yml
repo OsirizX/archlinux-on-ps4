@@ -31,7 +31,7 @@ jobs:
 
           sudo cp /etc/resolv.conf gentoo/etc
 
-          git clone https://github.com/Dr4kk3N/ps4-overlay.git gentoo/var/db/repos/ps4-overlay
+          sudo git clone https://github.com/Dr4kk3N/ps4-overlay.git gentoo/var/db/repos/ps4-overlay
 
           sudo mount -t proc /proc gentoo/proc/
           sudo mount -t sysfs /sys gentoo/sys/
