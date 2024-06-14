@@ -31,6 +31,8 @@ jobs:
 
           sudo cp /etc/resolv.conf gentoo/etc
 
+          git clone https://github.com/Dr4kk3N/ps4-overlay.git gentoo/var/db/repos/ps4-overlay
+
           sudo mount -t proc /proc gentoo/proc/
           sudo mount -t sysfs /sys gentoo/sys/
           sudo mount --rbind /dev gentoo/dev/
@@ -56,25 +58,15 @@ jobs:
           FFLAGS="\${COMMON_FLAGS}"
           BINPKG_FORMAT="gpkg"
           BINPKG_COMPRESS="lz4"
-          EMERGE_DEFAULT_OPTS="-v --getbinpkg"
+          EMERGE_DEFAULT_OPTS="--quiet-build=y"
           EMERGE_DEFAULT_OPTS="\${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'sys-kernel/gentoo-sources virtual/*'"
           MAKEOPTS="-j8"
-          LC_MESSAGES=C.utf8
-          LINGUAS="en"
-          L10N="en en-US"
-          PYTHON_TARGETS="python3_12"
-          PYTHON_SINGLE_TARGET="python3_12"
-          LUA_TARGETS="lua5-3 lua5-4"
-          LUA_SINGLE_TARGET="lua5-3"
-          RUBY_TARGETS="ruby31 ruby32"
-          PHP_TARGETS="php8-1"
           LLVM_TARGETS="AMDGPU"
           VIDEO_CARDS="amdgpu radeon radeonsi lavapipe"
           ACCEPT_KEYWORDS="~amd64"
           ACCEPT_LICENSE="*"
           INPUT_DEVICES="libinput keyboard mouse evdev joystick"
-          #USE="X wayland"
-          GENTOO_MIRRORS="http://ftp.free.fr/mirrors/ftp.gentoo.org/ http://mirrors.soeasyto.com/distfiles.gentoo.org/ http://gentoo.mirrors.ovh.net/gentoo-distfiles/"
+          GENTOO_MIRRORS="http://distfiles.gentoo.org/ http://ftp.free.fr/mirrors/ftp.gentoo.org/ http://mirrors.soeasyto.com/distfiles.gentoo.org/ http://gentoo.mirrors.ovh.net/gentoo-distfiles/"
           EOF
 
           mkdir -p /etc/portage/repos.conf
@@ -86,14 +78,6 @@ jobs:
           auto-sync = no
           priority = 25
           EOF
-
-          getuto
-
-          emerge app-admin/sudo \
-                 app-editors/vim \
-                 dev-vcs/git
-
-          git clone https://github.com/Dr4kk3N/ps4-overlay.git /var/db/repos/ps4-overlay
 
           cat << EOF > /etc/portage/repos.conf/ps4-overlay.conf
           [ps4-overlay]
@@ -110,9 +94,15 @@ jobs:
           media-libs/mesa::gentoo
           EOF
 
+          getuto
+
+          emerge app-admin/sudo \
+                 app-editors/vim \
+                 dev-vcs/git
+
           #emerge x11-libs/libdrm::ps4-overlay \
-                 x11-drivers/xf86-video-amdgpu::ps4-overlay \
-                 media-libs/mesa::ps4-overlay
+          #       x11-drivers/xf86-video-amdgpu::ps4-overlay \
+          #       media-libs/mesa::ps4-overlay
 
           mkdir -p /lib/firmware/edid
 
