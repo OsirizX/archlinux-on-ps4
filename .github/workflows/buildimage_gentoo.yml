@@ -6,6 +6,7 @@ on:
 env:
   STAGE3_VERSION: 20240602T164858Z
   PORTAGE_VERSION: 20240607
+  PORTAGE_VERSION_GIT: 2024-06-07
 
 jobs:
   build:
@@ -20,14 +21,20 @@ jobs:
         run: wget -q https://distfiles.gentoo.org/releases/amd64/autobuilds/${{ env.STAGE3_VERSION }}/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz
 
       - name: Download portage
-        run: wget -q https://distfiles.gentoo.org/snapshots/gentoo-${{ env.PORTAGE_VERSION }}.tar.xz
+        #run: wget -q https://distfiles.gentoo.org/snapshots/gentoo-${{ env.PORTAGE_VERSION }}.tar.xz
+        run: |
+          git clone https://github.com/gentoo/gentoo portage
+          cd portage
+          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.PORTAGE_VERSION_GIT }}" master)
 
       - name: Install dependencies
         run: |
           sudo mkdir gentoo
           sudo tar --numeric-owner --strip-components=1 -xpf stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz -C gentoo
-          sudo mkdir -p gentoo/var/db/repos/gentoo
-          sudo tar --numeric-owner --strip-components=1 -xpf gentoo-${{ env.PORTAGE_VERSION }}.tar.xz -C gentoo/var/db/repos/gentoo
+          #sudo mkdir -p gentoo/var/db/repos/gentoo
+          #sudo tar --numeric-owner --strip-components=1 -xpf gentoo-${{ env.PORTAGE_VERSION }}.tar.xz -C gentoo/var/db/repos/gentoo
+
+          sudo mv portage gentoo/var/db/repos/gentoo
 
           sudo cp /etc/resolv.conf gentoo/etc
 
@@ -58,7 +65,7 @@ jobs:
           FFLAGS="\${COMMON_FLAGS}"
           BINPKG_FORMAT="gpkg"
           BINPKG_COMPRESS="lz4"
-          EMERGE_DEFAULT_OPTS="--quiet-build=y"
+          EMERGE_DEFAULT_OPTS="--quiet-build=y --getbinpkg"
           EMERGE_DEFAULT_OPTS="\${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'sys-kernel/gentoo-sources virtual/*'"
           MAKEOPTS="-j8"
           LLVM_TARGETS="AMDGPU"
