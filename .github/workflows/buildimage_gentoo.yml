@@ -56,7 +56,7 @@ jobs:
           FFLAGS="\${COMMON_FLAGS}"
           BINPKG_FORMAT="gpkg"
           BINPKG_COMPRESS="lz4"
-          EMERGE_DEFAULT_OPTS="-v --getbinpkgonly"
+          EMERGE_DEFAULT_OPTS="-v --getbinpkg"
           EMERGE_DEFAULT_OPTS="\${EMERGE_DEFAULT_OPTS} --usepkg-exclude 'sys-kernel/gentoo-sources virtual/*'"
           MAKEOPTS="-j8"
           LC_MESSAGES=C.utf8
@@ -73,7 +73,7 @@ jobs:
           ACCEPT_KEYWORDS="~amd64"
           ACCEPT_LICENSE="*"
           INPUT_DEVICES="libinput keyboard mouse evdev joystick"
-          USE="X wayland"
+          #USE="X wayland"
           GENTOO_MIRRORS="http://ftp.free.fr/mirrors/ftp.gentoo.org/ http://mirrors.soeasyto.com/distfiles.gentoo.org/ http://gentoo.mirrors.ovh.net/gentoo-distfiles/"
           EOF
 
