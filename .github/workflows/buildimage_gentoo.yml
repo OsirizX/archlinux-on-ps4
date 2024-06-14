@@ -73,7 +73,7 @@ jobs:
           ACCEPT_KEYWORDS="~amd64"
           ACCEPT_LICENSE="*"
           INPUT_DEVICES="libinput keyboard mouse evdev joystick"
-          USE="X abi_x86_64 abi_x86_32 lto systemd elogind dbus ibus policykit pulseaudio pipewire \
+          USEX="X abi_x86_64 abi_x86_32 lto systemd elogind dbus ibus policykit pulseaudio pipewire \
             -gstreamer wayland -gnome -kde -xinerama -samba -xscreensaver \
             networkmanager nftables openvpn lm_sensors lm-sensors hddtemp bluetooth \
             highlight vim-syntax hscolour appindicator startup-notification libnotify \
