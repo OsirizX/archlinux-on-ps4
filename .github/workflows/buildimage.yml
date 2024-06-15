@@ -52,7 +52,6 @@ jobs:
           [ps4]
           SigLevel = Never
           Server = https://psxita.it/repo-testing
-          EOF
 
           [sevencoil]
           SigLevel = Never
