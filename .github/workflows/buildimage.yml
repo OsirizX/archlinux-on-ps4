@@ -49,9 +49,14 @@ jobs:
           [multilib]
           Include = /etc/pacman.d/mirrorlist
 
-          [ps4]
+          [psxita]
           SigLevel = Never
           Server = https://psxita.it/repo-testing
+          EOF
+
+          [sevencoil]
+          SigLevel = Never
+          Server = https://archlinux.leondrolio.com/packages/$repo/os/$arch
           EOF
 
           cat << EOF > /etc/pacman.d/mirrorlist
@@ -63,7 +68,7 @@ jobs:
           pacman-key --populate archlinux
           pacman --noconfirm -Syu
           pacman --noconfirm -S sudo base-devel git vim tmux wget curl alacritty \
-                                mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git \
+                                mesa-ps4 lib32-libdrm-ps4 lib32-mesa-ps4 libdrm-ps4 xf86-video-amdgpu-ps4 \
                                 llvm14 llvm14-libs meson libvdpau lib32-libvdpau libva lib32-libva libva-utils python-mako \
                                 wayland xorg-xwayland xorg-xinit sway i3 \
                                 pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse alsa-utils \
