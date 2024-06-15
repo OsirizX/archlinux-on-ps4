@@ -5,8 +5,8 @@ on:
 
 env:
   STAGE3_VERSION: 20240602T164858Z
-  PORTAGE_VERSION: 20240607
-  GIT_VERSION: 2024-06-07
+  PORTAGE_VERSION: 20240602
+  GIT_VERSION: 2024-06-02
 
 jobs:
   build:
@@ -18,7 +18,8 @@ jobs:
         run: echo "VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
 
       - name: Download stage3
-        run: wget -q https://distfiles.gentoo.org/releases/amd64/autobuilds/${{ env.STAGE3_VERSION }}/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz
+        #run: wget -q https://distfiles.gentoo.org/releases/amd64/autobuilds/${{ env.STAGE3_VERSION }}/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz
+        run: wget -q https://archive.org/download/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz
 
       - name: Download portage
         #run: wget -q https://distfiles.gentoo.org/snapshots/gentoo-${{ env.PORTAGE_VERSION }}.tar.xz
