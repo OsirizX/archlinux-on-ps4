@@ -56,6 +56,7 @@ jobs:
 
           cat << EOF > /etc/pacman.d/mirrorlist
           Server = https://archive.archlinux.org/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
+          Server = https://america.archive.pkgbuild.com/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
           EOF
 
           pacman-key --init
