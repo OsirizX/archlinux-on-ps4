@@ -111,6 +111,7 @@ jobs:
 
           emerge app-admin/sudo \
                  app-editors/vim \
+                 app-misc/tmux \
                  dev-vcs/git
 
           emerge x11-libs/libdrm::ps4-overlay \
