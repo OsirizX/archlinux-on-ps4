@@ -4,15 +4,21 @@ on:
   workflow_dispatch:
 
 env:
-  VERSION: 2024.06.01
+  ARCH_VERSION: 2024.06.01
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set version vars
+        shell: bash
+        run: |
+          echo "ARCH_DATE=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./\//g'" >> $GITHUB_ENV
+          echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g'" >> $GITHUB_ENV
+
       - name: Download Arch Linux
-        run: wget -q https://archive.archlinux.org/iso/$VERSION/archlinux-bootstrap-x86_64.tar.zst
+        run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-x86_64.tar.zst
 
       - name: Install dependencies
         run: |
@@ -48,10 +54,8 @@ jobs:
           Server = https://psxita.it/repo-testing
           EOF
 
-          VER=$(echo ${{ env.VERSION }} | sed -r 's/\./\//g')
-
           cat << EOF > /etc/pacman.d/mirrorlist
-          Server = https://archive.archlinux.org/repos/$VER/\$repo/os/\$arch
+          Server = https://archive.archlinux.org/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
           EOF
 
           mkdir -p /lib/firmware/edid
@@ -64,7 +68,11 @@ jobs:
           pacman-key --init
           pacman-key --populate archlinux
           pacman --noconfirm -Syu
-          pacman --noconfirm -S git base-devel vim wget curl sudo mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git llvm14-libs
+          pacman --noconfirm -S git base-devel vim tmux wget curl sudo \
+                                mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git llvm14-libs \
+                                wayland xorg-xwayland xorg-xinit sway i3 \
+                                pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse \
+                                x11vnc
 
           echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
           echo 'Defaults lecture="never"' >> /etc/sudoers
@@ -85,10 +93,10 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
-          sudo tar -czpf archlinux-${{ env.VERSION }}.tar.xz --one-file-system -C archlinux .
+          sudo tar -czpf archlinux-${{ env.OUTPUT_VERSION }}.tar.xz --one-file-system -C archlinux .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: archlinux-${{ env.VERSION }}
-          path: archlinux-${{ env.VERSION }}.tar.xz
+          name: archlinux-${{ env.OUTPUT_VERSION }}
+          path: archlinux-${{ env.OUTPU_VERSION }}.tar.xz
