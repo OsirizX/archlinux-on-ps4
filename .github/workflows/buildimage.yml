@@ -10,7 +10,10 @@ jobs:
     steps:
       - name: Set current Date Time as VERSION
         shell: bash
-        run: echo "VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+        run: |
+          echo "ARCH_VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+          echo "ARCH_DATE=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./\//g')" >> $GITHUB_ENV
+          echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g')" >> $GITHUB_ENV
 
       - name: Download Arch Linux
         run: wget -q https://www.mirrorservice.org/sites/ftp.archlinux.org/iso/latest/archlinux-bootstrap-x86_64.tar.zst
@@ -49,10 +52,8 @@ jobs:
           Server = https://psxita.it/repo-testing
           EOF
 
-          VER=$(echo ${{ env.VERSION }} | sed -r 's/\./\//g')
-
           cat << EOF > /etc/pacman.d/mirrorlist
-          Server = https://archive.archlinux.org/repos/$VER/\$repo/os/\$arch
+          Server = https://archive.archlinux.org/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
           EOF
 
           mkdir -p /lib/firmware/edid
@@ -86,10 +87,10 @@ jobs:
           sudo umount -l archlinux/dev/
           sudo umount -l archlinux/run/
 
-          sudo tar -czpf archlinux-${{ env.VERSION }}.tar.xz --one-file-system -C archlinux .
+          sudo tar -czpf archlinux-${{ env.OUTPUT_VERSION }}.tar.xz --one-file-system -C archlinux .
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: archlinux-${{ env.VERSION }}
-          path: archlinux-${{ env.VERSION }}.tar.xz
+          name: archlinux-${{ env.OUTPUT_VERSION }}
+          path: archlinux-${{ env.OUTPUT_VERSION }}.tar.xz
