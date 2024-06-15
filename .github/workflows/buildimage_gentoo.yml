@@ -121,6 +121,9 @@ jobs:
                  x11-wm/i3 \
                  x11-terms/alacritty
 
+          emerge media-video/pipewire \
+                 media-sound/alsa-utils
+
           mkdir -p /lib/firmware/edid
 
           useradd -m pi -G pi
