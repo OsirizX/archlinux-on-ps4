@@ -3,11 +3,6 @@ name: Create Gentoo image
 on:
   workflow_dispatch:
 
-env:
-  STAGE3_VERSION: 20240602T164858Z
-  PORTAGE_VERSION: 20240607
-  GIT_VERSION: 2024-06-07
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,13 +10,18 @@ jobs:
     steps:
       - name: Set current Date Time as VERSION
         shell: bash
-        run: echo "VERSION=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+        run: |
+          echo "PORTAGE_VERSION=$(date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "GIT_VERSION=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          wget https://distfiles.gentoo.org/releases/amd64/autobuilds/latest-stage3-amd64-desktop-systemd.txt
+          STAGE3_VERSION=$(cat latest-stage3-amd64-desktop-systemd.txt | grep stage3 | cut -d' ' -f1 | cut -d'/' -f1)
+          echo "STAGE3_VERSION=${STAGE3_VERSION}" >> $GITHUB_ENV
 
       - name: Download stage3
-        run: wget -q https://distfiles.gentoo.org/releases/amd64/autobuilds/${{ env.STAGE3_VERSION }}/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz
+        run: |
+          wget -q https://distfiles.gentoo.org/releases/amd64/autobuilds/${{ env.STAGE3_VERSION }}/stage3-amd64-desktop-systemd-${{ env.STAGE3_VERSION }}.tar.xz
 
       - name: Download portage
-        #run: wget -q https://distfiles.gentoo.org/snapshots/gentoo-${{ env.PORTAGE_VERSION }}.tar.xz
         run: |
           git clone https://github.com/gentoo/gentoo.git portage
           cd portage
