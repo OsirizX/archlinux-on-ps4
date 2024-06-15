@@ -14,8 +14,7 @@ jobs:
           echo "PORTAGE_VERSION=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "GIT_VERSION=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           wget https://distfiles.gentoo.org/releases/amd64/autobuilds/latest-stage3-amd64-desktop-systemd.txt
-          STAGE3_VERSION=$(cat latest-stage3-amd64-desktop-systemd.txt | grep stage3 | cut -d' ' -f1 | cut -d'/' -f1)
-          echo "STAGE3_VERSION=${STAGE3_VERSION}" >> $GITHUB_ENV
+          echo "STAGE3_VERSION=$(cat latest-stage3-amd64-desktop-systemd.txt | grep stage3 | cut -d' ' -f1 | cut -d'/' -f1)" >> $GITHUB_ENV
 
       - name: Download stage3
         run: |
@@ -109,24 +108,11 @@ jobs:
 
           getuto
 
-          emerge app-admin/sudo \
-                 app-editors/vim \
-                 app-misc/tmux \
-                 dev-vcs/git
-
-          emerge x11-libs/libdrm::ps4-overlay \
-                 x11-drivers/xf86-video-amdgpu::ps4-overlay \
-                 media-libs/mesa::ps4-overlay
-
-          emerge gui-wm/sway \
-                 x11-wm/i3 \
-                 x11-terms/alacritty
-
-          emerge media-video/pipewire \
-                 media-sound/alsa-utils
-
-          emerge x11-misc/x11vnc \
-                 net-misc/sunshine
+          emerge app-admin/sudo app-editors/vim app-misc/tmux dev-vcs/git \
+                 x11-libs/libdrm::ps4-overlay x11-drivers/xf86-video-amdgpu::ps4-overlay media-libs/mesa::ps4-overlay \
+                 gui-wm/sway x11-wm/i3 x11-terms/alacritty \
+                 media-video/pipewire media-video/wireplumber media-sound/alsa-utils \
+                 x11-misc/x11vnc net-misc/sunshine
 
           mkdir -p /lib/firmware/edid
 
