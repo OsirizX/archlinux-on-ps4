@@ -124,6 +124,9 @@ jobs:
           emerge media-video/pipewire \
                  media-sound/alsa-utils
 
+          emerge x11-misc/x11vnc \
+                 net-misc/sunshine
+
           mkdir -p /lib/firmware/edid
 
           useradd -m pi -G pi
