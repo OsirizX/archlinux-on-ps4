@@ -49,7 +49,7 @@ jobs:
           [multilib]
           Include = /etc/pacman.d/mirrorlist
 
-          [psxita]
+          [ps4]
           SigLevel = Never
           Server = https://psxita.it/repo-testing
           EOF
