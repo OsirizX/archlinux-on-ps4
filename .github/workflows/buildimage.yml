@@ -63,7 +63,7 @@ jobs:
           pacman --noconfirm -Syu
           pacman --noconfirm -S sudo base-devel git vim tmux wget curl alacritty \
                                 mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git \
-                                llvm14 llvm14-libs meson libvdpau libva-utils python3-mako \
+                                llvm14 llvm14-libs meson libvdpau libva-utils python-mako \
                                 wayland xorg-xwayland xorg-xinit sway i3 \
                                 pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse alsa-utils \
                                 x11vnc
