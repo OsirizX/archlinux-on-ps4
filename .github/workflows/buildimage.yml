@@ -68,10 +68,10 @@ jobs:
           pacman-key --init
           pacman-key --populate archlinux
           pacman --noconfirm -Syu
-          pacman --noconfirm -S git base-devel vim tmux wget curl sudo \
+          pacman --noconfirm -S sudo base-devel git vim tmux wget curl alacritty \
                                 mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git llvm14-libs \
                                 wayland xorg-xwayland xorg-xinit sway i3 \
-                                pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse \
+                                pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse alsa-utils \
                                 x11vnc
 
           echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
@@ -99,4 +99,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: archlinux-${{ env.OUTPUT_VERSION }}
-          path: archlinux-${{ env.OUTPU_VERSION }}.tar.xz
+          path: archlinux-${{ env.OUTPUT_VERSION }}.tar.xz
