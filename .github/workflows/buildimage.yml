@@ -14,8 +14,8 @@ jobs:
       - name: Set version vars
         shell: bash
         run: |
-          echo "ARCH_DATE=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./\//g'" >> $GITHUB_ENV
-          echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g'" >> $GITHUB_ENV
+          echo "ARCH_DATE=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./\//g')" >> $GITHUB_ENV
+          echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g')" >> $GITHUB_ENV
 
       - name: Download Arch Linux
         run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-x86_64.tar.zst
