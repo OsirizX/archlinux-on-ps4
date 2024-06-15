@@ -130,7 +130,7 @@ jobs:
 
           mkdir -p /lib/firmware/edid
 
-          useradd -m pi
+          useradd -m pi -G wheel
           passwd pi
           raspberry
           raspberry
