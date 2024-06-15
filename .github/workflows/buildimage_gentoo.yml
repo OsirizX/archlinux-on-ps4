@@ -110,24 +110,11 @@ jobs:
 
           getuto
 
-          emerge app-admin/sudo \
-                 app-editors/vim \
-                 app-misc/tmux \
-                 dev-vcs/git
-
-          emerge x11-libs/libdrm::ps4-overlay \
-                 x11-drivers/xf86-video-amdgpu::ps4-overlay \
-                 media-libs/mesa::ps4-overlay
-
-          emerge gui-wm/sway \
-                 x11-wm/i3 \
-                 x11-terms/alacritty
-
-          emerge media-video/pipewire \
-                 media-sound/alsa-utils
-
-          emerge x11-misc/x11vnc \
-                 net-misc/sunshine
+          emerge app-admin/sudo app-editors/vim app-misc/tmux dev-vcs/git \
+                 x11-libs/libdrm::ps4-overlay x11-drivers/xf86-video-amdgpu::ps4-overlay media-libs/mesa::ps4-overlay \
+                 gui-wm/sway x11-wm/i3 x11-terms/alacritty \
+                 media-video/pipewire media-video/wireplumber media-sound/alsa-utils \
+                 x11-misc/x11vnc net-misc/sunshine
 
           mkdir -p /lib/firmware/edid
 
