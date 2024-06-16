@@ -50,11 +50,30 @@ jobs:
           [ps4]
           SigLevel = Never
           Server = https://psxita.it/repo-testing
+
+          [sevencoil]
+          SigLevel = Never
+          Server = https://archlinux.leondrolio.com/packages/$repo/os/$arch
           EOF
+
+          sed -i -e "s/SigLevel.*/SigLevel = Never/g" /etc/pacman.conf
 
           cat << EOF > /etc/pacman.d/mirrorlist
           Server = https://archive.archlinux.org/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
+          Server = https://america.archive.pkgbuild.com/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
           EOF
+
+          pacman-key --init
+          pacman-key --populate archlinux
+          pacman --noconfirm -Syu
+          pacman --noconfirm -S sudo base-devel git vim tmux wget curl alacritty \
+                                mesa-ps4 lib32-libdrm-ps4 lib32-mesa-ps4 libdrm-ps4 xf86-video-amdgpu-ps4 \
+                                llvm14 llvm14-libs clang14 meson libvdpau lib32-libvdpau libva lib32-libva libva-utils cmake \
+                                python-mako libxml2 lib32-libxml2 libx11 lib32-libx11 xorgproto lib32-gcc-libs lib32-libelf lib32-libglvnd \
+                                elfutils ocl-icd ninja glslang xorg-server-devel systemd-libs \
+                                wayland wayland-protocols lib32-wayland xorg-xwayland xorg-xinit libxrandr lib32-libxrandr sway i3-wm i3status \
+                                pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse alsa-utils \
+                                x11vnc
 
           mkdir -p /lib/firmware/edid
 
@@ -63,21 +82,28 @@ jobs:
           raspberry
           raspberry
 
-          pacman-key --init
-          pacman-key --populate archlinux
-          pacman --noconfirm -Syu
-          pacman --noconfirm -S sudo base-devel git vim tmux wget curl alacritty \
-                                mesa-git lib32-libdrm-git lib32-mesa-git libdrm-git llvm14-libs \
-                                wayland xorg-xwayland xorg-xinit sway i3 \
-                                pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse alsa-utils \
-                                x11vnc
-
           echo '%wheel ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
           echo 'Defaults lecture="never"' >> /etc/sudoers
 
           su pi
           cd ~/
           touch ~/.sudo_as_admin_successful
+
+          git clone https://github.com/OsirizX/archlinux-packages.git -b mesa-21.3.2 --single-branch archlinux-packages
+          cd archlinux-packages
+          cd lib32-libdrm-ps4
+          makepkg -df
+          cd ../libdrm-ps4
+          makepkg -df
+          cd ../xf86-video-amdgpu-ps4
+          makepkg -df
+          cd ../lib32-mesa-ps4
+          makepkg -df
+          cd ../mesa-ps4
+          makepkg -df
+          cd ..
+          sudo pacman --noconfirm -U lib32-libdrm-ps4/*.tar.zst libdrm-ps4/*.tar.zst xf86-video-amdgpu-ps4/*.tar.zst lib32-mesa-ps4/*.tar.zst mesa-ps4/*.tar.zst
+          cd ..
 
           git clone https://aur.archlinux.org/yay-bin.git
           cd yay-bin
