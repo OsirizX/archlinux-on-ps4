@@ -98,14 +98,16 @@ jobs:
           makepkg -df
           cd ../libdrm-ps4
           makepkg -df
-          cd ../xf86-video-amdgpu-ps4
-          makepkg -df
-          cd ../lib32-mesa-ps4
+          cd ..
+          sudo pacman --noconfirm -U lib32-libdrm-ps4/*.tar.zst libdrm-ps4/*.tar.zst
+          cd lib32-mesa-ps4
           makepkg -df
           cd ../mesa-ps4
           makepkg -df
+          cd ../xf86-video-amdgpu-ps4
+          makepkg -df
           cd ..
-          sudo pacman --noconfirm -U lib32-libdrm-ps4/*.tar.zst libdrm-ps4/*.tar.zst xf86-video-amdgpu-ps4/*.tar.zst lib32-mesa-ps4/*.tar.zst mesa-ps4/*.tar.zst
+          sudo pacman --noconfirm -U lib32-libdrm-ps4/*.tar.zst libdrm-ps4/*.tar.zst lib32-mesa-ps4/*.tar.zst mesa-ps4/*.tar.zst xf86-video-amdgpu-ps4/*.tar.zst
           cd ..
 
           git clone https://aur.archlinux.org/yay-bin.git
