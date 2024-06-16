@@ -91,6 +91,8 @@ jobs:
           cd ~/
           touch ~/.sudo_as_admin_successful
 
+          ulimit -n 2024
+
           git clone https://github.com/OsirizX/archlinux-packages.git -b mesa-21.3.2 --single-branch archlinux-packages
           cd archlinux-packages
           cd lib32-libdrm-ps4
