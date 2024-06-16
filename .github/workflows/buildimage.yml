@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  ARCH_VERSION: 2024.06.01
+  ARCH_VERSION: 2022.06.01
 
 jobs:
   build:
@@ -18,12 +18,12 @@ jobs:
           echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g')" >> $GITHUB_ENV
 
       - name: Download Arch Linux
-        run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-x86_64.tar.zst
+        run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-x86_64.tar.gz
 
       - name: Install dependencies
         run: |
           sudo mkdir archlinux
-          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.zst -C archlinux
+          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.gz -C archlinux
 
           sudo cp /etc/resolv.conf archlinux/etc
 
@@ -70,7 +70,7 @@ jobs:
           pacman --noconfirm -Syu
           pacman --noconfirm -S sudo base-devel git vim tmux wget curl alacritty \
                                 mesa-ps4 lib32-libdrm-ps4 lib32-mesa-ps4 libdrm-ps4 xf86-video-amdgpu-ps4 \
-                                llvm14 llvm14-libs clang14 meson libvdpau lib32-libvdpau libva lib32-libva libva-utils cmake \
+                                llvm llvm-libs clang meson libvdpau lib32-libvdpau libva lib32-libva libva-utils cmake \
                                 python-mako libxml2 lib32-libxml2 libx11 lib32-libx11 xorgproto lib32-gcc-libs lib32-libelf lib32-libglvnd \
                                 elfutils ocl-icd ninja glslang xorg-server-devel systemd-libs libxcb lib32-libxcb \
                                 wayland wayland-protocols lib32-wayland xorg-xwayland xorg-xinit libxrandr lib32-libxrandr sway i3-wm i3status \
@@ -93,7 +93,7 @@ jobs:
 
           ulimit -n 2024
 
-          git clone https://github.com/OsirizX/archlinux-packages.git -b mesa-21.3.2 --single-branch archlinux-packages
+          git clone https://github.com/OsirizX/archlinux-packages.git -b master --single-branch archlinux-packages
           cd archlinux-packages
           cd lib32-libdrm-ps4
           makepkg -df
