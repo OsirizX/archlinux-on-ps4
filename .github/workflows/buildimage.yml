@@ -111,6 +111,7 @@ jobs:
 
           git clone https://aur.archlinux.org/yay-bin.git
           cd yay-bin
+          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.ARCH_DATE }}" master)
           makepkg -si --noconfirm
           cd ..
           exit
