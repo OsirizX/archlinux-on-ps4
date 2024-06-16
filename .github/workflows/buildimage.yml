@@ -16,14 +16,15 @@ jobs:
         run: |
           echo "ARCH_DATE=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./\//g')" >> $GITHUB_ENV
           echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g')" >> $GITHUB_ENV
+          echo "GIT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./-/g')" >> $GITHUB_ENV
 
       - name: Download Arch Linux
-        run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-x86_64.tar.zst
+        run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-${{ env.ARCH_VERSION }}-x86_64.tar.gz
 
       - name: Install dependencies
         run: |
           sudo mkdir archlinux
-          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.zst -C archlinux
+          udo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-${{ env.ARCH_VERSION }}-x86_64.tar.gz -C archlinux
 
           sudo cp /etc/resolv.conf archlinux/etc
 
@@ -93,7 +94,7 @@ jobs:
 
           ulimit -n 2024
 
-          git clone https://github.com/OsirizX/archlinux-packages.git -b mesa-21.3.2 --single-branch archlinux-packages
+          git clone https://github.com/OsirizX/archlinux-packages.git -b mesa-22.1.7 --depth 1 --single-branch archlinux-packages
           cd archlinux-packages
           cd lib32-libdrm-ps4
           makepkg -df
@@ -111,6 +112,7 @@ jobs:
 
           git clone https://aur.archlinux.org/yay-bin.git
           cd yay-bin
+          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.GIT_VERSION }}" master)
           makepkg -si --noconfirm
           cd ..
           exit
