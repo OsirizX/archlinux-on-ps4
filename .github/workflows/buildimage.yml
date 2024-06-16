@@ -116,6 +116,8 @@ jobs:
           git checkout $(git rev-list -n 1 --first-parent --before="${{ env.GIT_VERSION }}" master)
           makepkg -si --noconfirm
           cd ..
+
+          rm -rf /var/cache/*
           exit
           EOT
 
