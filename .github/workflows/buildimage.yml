@@ -117,6 +117,8 @@ jobs:
           makepkg -si --noconfirm
           cd ..
 
+          rm -rf archlinux-packages
+          rm -rf yay-bin
           rm -rf /var/cache/*
           exit
           EOT
