@@ -18,12 +18,12 @@ jobs:
           echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g')" >> $GITHUB_ENV
 
       - name: Download Arch Linux
-        run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-x86_64.tar.gz
+        run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-${{ env.ARCH_VERSION }}-x86_64.tar.gz
 
       - name: Install dependencies
         run: |
           sudo mkdir archlinux
-          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-x86_64.tar.gz -C archlinux
+          sudo tar --numeric-owner --strip-components=1 -xpf archlinux-bootstrap-${{ env.ARCH_VERSION }}-x86_64.tar.gz -C archlinux
 
           sudo cp /etc/resolv.conf archlinux/etc
 
