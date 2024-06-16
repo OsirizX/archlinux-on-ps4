@@ -74,7 +74,7 @@ jobs:
                                 python-mako libxml2 lib32-libxml2 libx11 lib32-libx11 xorgproto lib32-gcc-libs lib32-libelf lib32-libglvnd \
                                 elfutils ocl-icd ninja glslang xorg-server-devel systemd-libs libxcb lib32-libxcb \
                                 wayland wayland-protocols lib32-wayland xorg-xwayland xorg-xinit libxrandr lib32-libxrandr sway i3-wm i3status \
-                                pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse alsa-utils \
+                                pipewire wireplumber pipewire-alsa pipewire-pulse alsa-utils \
                                 x11vnc
 
           mkdir -p /lib/firmware/edid
