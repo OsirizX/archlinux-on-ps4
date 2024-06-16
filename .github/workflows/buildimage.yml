@@ -71,8 +71,9 @@ jobs:
           pacman --noconfirm -Syu
           pacman --noconfirm -S sudo base-devel git vim tmux wget curl alacritty \
                                 mesa-ps4 lib32-libdrm-ps4 lib32-mesa-ps4 libdrm-ps4 xf86-video-amdgpu-ps4 \
-                                llvm llvm-libs clang meson libvdpau lib32-libvdpau libva lib32-libva libva-utils cmake \
-                                python-mako libxml2 lib32-libxml2 libx11 lib32-libx11 xorgproto lib32-gcc-libs lib32-libelf lib32-libglvnd \
+                                llvm llvm-libs gcc-libs clang meson libvdpau libva libva-utils cmake \
+                                lib32-llvm lib32-llvm-libs lib32-gcc-libs lib32-clang lib32-libvdpau lib32-libva lib32-libelf lib32-libglvnd \
+                                python-mako libxml2 lib32-libxml2 libx11 lib32-libx11 xorgproto \
                                 elfutils ocl-icd ninja glslang xorg-server-devel systemd-libs libxcb lib32-libxcb \
                                 wayland wayland-protocols lib32-wayland xorg-xwayland xorg-xinit libxrandr lib32-libxrandr sway i3-wm i3status \
                                 pipewire wireplumber pipewire-alsa pipewire-pulse alsa-utils \
