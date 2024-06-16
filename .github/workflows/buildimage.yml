@@ -16,6 +16,7 @@ jobs:
         run: |
           echo "ARCH_DATE=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./\//g')" >> $GITHUB_ENV
           echo "OUTPUT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\.//g')" >> $GITHUB_ENV
+          echo "GIT_VERSION=$(echo ${{ env.ARCH_VERSION }} | sed -r 's/\./-/g')" >> $GITHUB_ENV
 
       - name: Download Arch Linux
         run: wget -q https://archive.archlinux.org/iso/${{ env.ARCH_VERSION }}/archlinux-bootstrap-${{ env.ARCH_VERSION }}-x86_64.tar.gz
@@ -111,7 +112,7 @@ jobs:
 
           git clone https://aur.archlinux.org/yay-bin.git
           cd yay-bin
-          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.ARCH_DATE }}" master)
+          git checkout $(git rev-list -n 1 --first-parent --before="${{ env.GIT_VERSION }}" master)
           makepkg -si --noconfirm
           cd ..
           exit
