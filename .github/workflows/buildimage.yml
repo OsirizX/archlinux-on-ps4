@@ -58,6 +58,8 @@ jobs:
           Server = https://archlinux.leondrolio.com/packages/$repo/os/$arch
           EOF
 
+          sed -i -e "s/SigLevel.*/SigLevel = Never/g" /etc/pacman.conf
+
           cat << EOF > /etc/pacman.d/mirrorlist
           Server = https://archive.archlinux.org/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
           Server = https://america.archive.pkgbuild.com/repos/${{ env.ARCH_DATE }}/\$repo/os/\$arch
