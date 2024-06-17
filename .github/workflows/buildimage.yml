@@ -74,7 +74,7 @@ jobs:
                                 llvm llvm-libs gcc-libs clang meson libvdpau libva libva-utils cmake valgrind python-docutils \
                                 lib32-llvm lib32-llvm-libs lib32-gcc-libs lib32-clang lib32-libvdpau lib32-libva lib32-libelf lib32-libglvnd \
                                 python-packaging python-mako libxml2 lib32-libxml2 libx11 lib32-libx11 xorgproto spirv-llvm-translator \
-                                elfutils ocl-icd ninja glslang xorg-server-devel systemd-libs libxcb lib32-libxcb \
+                                elfutils ocl-icd ninja glslang xorg-server xorg-server-devel systemd-libs libxcb lib32-libxcb \
                                 wayland wayland-protocols lib32-wayland xorg-xwayland xorg-xinit libxrandr lib32-libxrandr sway i3-wm i3status \
                                 pipewire pipewire-audio wireplumber pipewire-alsa pipewire-pulse alsa-utils \
                                 x11vnc
