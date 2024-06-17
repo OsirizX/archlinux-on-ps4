@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  ARCH_VERSION: 2023.06.01
+  ARCH_VERSION: 2024.01.01
 
 jobs:
   build:
